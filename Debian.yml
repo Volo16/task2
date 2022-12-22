@@ -1,0 +1,27 @@
+- name: Install Debian Apache
+  apt:
+    name: apache2
+    state: present
+
+- name: Start Debian Apache
+  systemd:
+    state: started
+    name: apache2
+    enabled: yes
+- name: Install Unzip  
+  ansible.builtin.apt:
+    name: unzip
+- name: Download CSS template
+  ansible.builtin.get_url:
+    url: https://www.free-css.com/assets/files/free-css-templates/download/page286/creative-studio.zip
+    dest: /tmp/
+- name: Extract CSS Template.zip into /tmp/index.html
+  ansible.builtin.unarchive:
+    src: /tmp/creative-studio.zip
+    dest: /tmp/
+    remote_src: yes  
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: /tmp/creative-studio/public_html/
+    dest: /var/www/html
+    remote_src: yes  
